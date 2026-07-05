@@ -22,10 +22,17 @@ pnpm build
 pnpm dev
 ```
 
-Database-backed forms require `DATABASE_URL`. PayTR checkout requires
-`PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT`, and `APP_URL`.
-Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before `pnpm db:seed` to create the first
-admin user.
+Database-backed forms require `DATABASE_URL`. For Supabase, set `DATABASE_URL`
+to the Supabase Postgres connection string, not the public API URL or anon key.
+At runtime the app also accepts `SUPABASE_DATABASE_URL`, `POSTGRES_PRISMA_URL`,
+or `POSTGRES_URL`, but Prisma migrations are simplest when `DATABASE_URL` is set.
+PayTR checkout requires `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`,
+`PAYTR_MERCHANT_SALT`, and `APP_URL`.
+
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before deploy. The same credentials work
+for `/account` login; on first successful admin login the app creates or updates
+that user with the `ADMIN` role. Running `pnpm db:seed` also creates the admin
+when those variables are present.
 
 ## Coolify
 

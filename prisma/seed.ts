@@ -1,7 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
 import { events, posts, products, staticPages } from "../src/lib/content";
+import { applyDatabaseUrl } from "../src/lib/env";
 
+applyDatabaseUrl();
 const prisma = new PrismaClient();
 
 async function main() {

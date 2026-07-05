@@ -1,15 +1,16 @@
 import { PrismaClient } from "@prisma/client";
+import { applyDatabaseUrl } from "@/lib/env";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
 };
 
 export function hasDatabase() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(applyDatabaseUrl());
 }
 
 export function getDb() {
-  if (!process.env.DATABASE_URL) {
+  if (!applyDatabaseUrl()) {
     throw new Error("DATABASE_URL is required for database-backed actions.");
   }
 
