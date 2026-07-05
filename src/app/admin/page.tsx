@@ -19,6 +19,51 @@ const modules = [
   "Settings",
 ];
 
+const missingItems = [
+  {
+    title: "Cift dilli icerik ve dil degistirici",
+    status: "Eksik",
+    detail:
+      "Baz sitede Turkce/English secimi ve /en/ akisi var; yeni sitede ana icerik tek dil agirlikli.",
+  },
+  {
+    title: "WordPress yorumlari ve blog yorum formu",
+    status: "Eksik",
+    detail:
+      "Eski yazilarda yorum birakma, isim/e-posta/website alanlari ve mevcut yorum yapisi gorunuyor.",
+  },
+  {
+    title: "Etkinlik biletleme ve favori aksiyonlari",
+    status: "Kismen",
+    detail:
+      "Etkinlik listesi ve booking temeli var; eski sitedeki saatli etkinlik detaylari, bilet fiyati ve favori davranisi birebir tasinmadi.",
+  },
+  {
+    title: "Tum eski icerik arsivi",
+    status: "Kismen",
+    detail:
+      "Gorunen ana sayfalar ve secili urun/yazilar yeniden kuruldu; tum eski blog, egitim, kocluk ve urun arsivi icin WordPress export veya DB dump gerekir.",
+  },
+  {
+    title: "Yan kolon widgetlari",
+    status: "Eksik",
+    detail:
+      "Eski sitedeki Event Calendar, son icerikler, egitim programlari, kitap listeleri, arama ve abonelik widgetlari birebir eklenmedi.",
+  },
+  {
+    title: "WooCommerce hesap ve gecmis kayitlari",
+    status: "Eksik",
+    detail:
+      "Yeni hesap, siparis ve odeme modeli hazir; eski kullanici, siparis, rezervasyon ve indirilebilir urun gecmisi dump olmadan aktarilamadi.",
+  },
+  {
+    title: "Eski tema/plugin davranislari",
+    status: "Kismen",
+    detail:
+      "Yeni arayuz daha sade ve Next.js odakli; eski WordPress tema animasyonlari, sosyal ikon setleri, breadcrumb ve translate eklentisi birebir kopyalanmadi.",
+  },
+];
+
 export default async function AdminPage() {
   const session = await getSession();
   const isAdmin = session?.role === "ADMIN";
@@ -191,6 +236,33 @@ export default async function AdminPage() {
                   </article>
                 ))
               )}
+            </div>
+          </section>
+          <section id="missing-items" className="mt-8 rounded-lg border border-stone-200 bg-white p-5">
+            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <h2 className="text-2xl font-semibold">Eksik Kalanlar</h2>
+                <p className="mt-2 text-sm text-stone-600">
+                  Baz alinan eski Shaman Life sitesinden yeni yapida birebir alinmayan veya kismen tasinan alanlar.
+                </p>
+              </div>
+              <Link href="#revisions" className="button-small">
+                Revizyon ac
+              </Link>
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              {missingItems.map((item) => (
+                <article key={item.title} className="rounded-lg border border-stone-200 p-4">
+                  <div className="flex flex-col justify-between gap-2 md:flex-row md:items-center">
+                    <h3 className="text-lg font-semibold">{item.title}</h3>
+                    <span className="self-start rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-amber-800 md:self-auto">
+                      {item.status}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-stone-700">{item.detail}</p>
+                </article>
+              ))}
             </div>
           </section>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
