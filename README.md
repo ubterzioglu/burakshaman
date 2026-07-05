@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shaman Life Next.js
 
-## Getting Started
+Full-stack Next.js rebuild of the Shaman Life / Burak Akcakanat WordPress site.
 
-First, run the development server:
+## Stack
+
+- Next.js App Router, TypeScript, Tailwind CSS
+- PostgreSQL with Prisma
+- PayTR iFrame checkout
+- Custom booking, contact, newsletter, account and admin foundations
+- Coolify-ready Docker deployment
+
+## Local setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env
+pnpm prisma:generate
+pnpm build
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Database-backed forms require `DATABASE_URL`. PayTR checkout requires
+`PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT`, and `APP_URL`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Coolify
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a PostgreSQL resource.
+2. Set the environment variables from `.env.example`.
+3. Deploy using the included `Dockerfile`.
+4. Run `pnpm prisma:migrate` or the equivalent one-off command before accepting live orders.
 
-## Learn More
+## Source migration notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The legacy WordPress files under `public_html/` are intentionally ignored and are
+not committed. Public content was rebuilt from the local theme/cache/assets and
+the current visible site. Historical users, orders and reservations require a
+WordPress database dump if they need to be migrated later.

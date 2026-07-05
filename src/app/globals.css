@@ -20,3 +20,108 @@ body {
 * {
   box-sizing: border-box;
 }
+
+a {
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.icon-link {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid #e7e0d4;
+  color: #4b4238;
+}
+
+.icon-link:hover {
+  border-color: #b45309;
+  color: #92400e;
+}
+
+.button,
+.button-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #1c1917;
+  color: white;
+  font-weight: 700;
+}
+
+.button {
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.button-small {
+  min-height: 2.5rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+}
+
+.button:hover,
+.button-small:hover {
+  background: #92400e;
+}
+
+.input,
+.form-panel input,
+.form-panel textarea,
+.form-panel select {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #d6d3d1;
+  background: white;
+  padding: 0.85rem 1rem;
+  color: #1c1917;
+  outline: none;
+}
+
+.input:focus,
+.form-panel input:focus,
+.form-panel textarea:focus,
+.form-panel select:focus {
+  border-color: #b45309;
+  box-shadow: 0 0 0 3px rgb(180 83 9 / 0.16);
+}
+
+.form-panel {
+  display: grid;
+  gap: 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid #e7e5e4;
+  background: white;
+  padding: 1.25rem;
+  box-shadow: 0 18px 55px rgb(28 25 23 / 0.08);
+}
+
+.form-panel button {
+  min-height: 3rem;
+  border-radius: 999px;
+  background: #1c1917;
+  color: white;
+  font-weight: 700;
+}
+
+.form-panel button:hover {
+  background: #92400e;
+}
+
+.section {
+  margin-inline: auto;
+  max-width: 80rem;
+  padding: 5rem 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-inline: 2rem;
+  }
+}
