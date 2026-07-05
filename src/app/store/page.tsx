@@ -1,11 +1,13 @@
 import { ProductCard } from "@/components/cards";
-import { products } from "@/lib/content";
+import { listProducts } from "@/lib/repository";
 
 export const metadata = {
   title: "E-Store",
 };
 
-export default function StorePage() {
+export default async function StorePage() {
+  const products = await listProducts();
+
   return (
     <main className="section">
       <p className="text-sm font-semibold uppercase tracking-[0.25em] text-amber-700">

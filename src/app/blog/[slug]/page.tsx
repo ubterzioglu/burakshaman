@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { posts } from "@/lib/content";
+import { getPost } from "@/lib/repository";
 
 export function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
@@ -12,7 +13,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((item) => item.slug === slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
   return (

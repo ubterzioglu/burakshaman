@@ -16,12 +16,16 @@ Full-stack Next.js rebuild of the Shaman Life / Burak Akcakanat WordPress site.
 pnpm install
 cp .env.example .env
 pnpm prisma:generate
+pnpm prisma:migrate
+pnpm db:seed
 pnpm build
 pnpm dev
 ```
 
 Database-backed forms require `DATABASE_URL`. PayTR checkout requires
 `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT`, and `APP_URL`.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before `pnpm db:seed` to create the first
+admin user.
 
 ## Coolify
 

@@ -1,10 +1,12 @@
-import { events } from "@/lib/content";
+import { listEvents } from "@/lib/repository";
 
 export const metadata = {
   title: "Events",
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const events = await listEvents();
+
   return (
     <main className="section">
       <p className="text-sm font-semibold uppercase tracking-[0.25em] text-amber-700">

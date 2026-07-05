@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { staticPages } from "@/lib/content";
+import { getPage } from "@/lib/repository";
 
 export function generateStaticParams() {
   return staticPages.map((page) => ({ slug: page.slug }));
@@ -11,7 +12,7 @@ export default async function StaticPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const page = staticPages.find((item) => item.slug === slug);
+  const page = await getPage(slug);
   if (!page) notFound();
 
   return (

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, hasDatabase } from "@/lib/db";
 import { jsonError } from "@/lib/http";
+import { sendMail } from "@/lib/mail";
 import { newsletterSchema } from "@/lib/validators";
 
 export async function POST(request: NextRequest) {
@@ -16,6 +17,10 @@ export async function POST(request: NextRequest) {
       where: { email: payload.email.toLowerCase() },
       create: { ...payload, email: payload.email.toLowerCase() },
       update: { name: payload.name, locale: payload.locale },
+    });
+    await sendMail({
+      subject: "New Shaman Life newsletter subscriber",
+      text: `${subscriber.name ?? ""}\n${subscriber.email}`,
     });
     return NextResponse.json({ ok: true, id: subscriber.id });
   } catch (error) {

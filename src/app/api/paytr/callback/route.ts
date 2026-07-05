@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb, hasDatabase } from "@/lib/db";
+import { sendMail } from "@/lib/mail";
 import { verifyPaytrCallback } from "@/lib/paytr";
 
 export async function POST(request: NextRequest) {
@@ -44,6 +45,14 @@ export async function POST(request: NextRequest) {
           amountCents: Number(totalAmount),
           providerPayload,
         },
+      });
+      await sendMail({
+        to: order.customerEmail,
+        subject:
+          status === "success"
+            ? "Shaman Life order confirmed"
+            : "Shaman Life payment failed",
+        text: `Order ${order.merchantOid}: ${status}`,
       });
     }
   }

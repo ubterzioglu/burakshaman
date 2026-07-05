@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSession } from "@/lib/auth";
 import { products } from "@/lib/content";
 import { getDb, hasDatabase } from "@/lib/db";
 import { jsonError } from "@/lib/http";
@@ -30,9 +31,11 @@ export async function POST(request: NextRequest) {
     const totalCents = product.priceCents * payload.quantity;
     const merchantOid = `SL${Date.now()}`;
     const db = getDb();
+    const session = await getSession();
     const order = await db.order.create({
       data: {
         merchantOid,
+        userId: session?.userId,
         customerName: payload.customerName,
         customerEmail: payload.customerEmail.toLowerCase(),
         customerPhone: payload.customerPhone,

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CheckoutForm } from "@/components/forms";
 import { formatTry, products } from "@/lib/content";
+import { getProduct } from "@/lib/repository";
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
@@ -13,7 +14,7 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = products.find((item) => item.slug === slug);
+  const product = await getProduct(slug);
   if (!product) notFound();
 
   return (

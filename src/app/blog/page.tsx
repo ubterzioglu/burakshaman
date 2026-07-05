@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { posts } from "@/lib/content";
+import { listPosts } from "@/lib/repository";
 
 export const metadata = {
   title: "Blog",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await listPosts();
+
   return (
     <main className="section">
       <p className="text-sm font-semibold uppercase tracking-[0.25em] text-amber-700">
