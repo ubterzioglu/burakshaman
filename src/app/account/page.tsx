@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { getDb, hasDatabase } from "@/lib/db";
 
@@ -81,16 +82,9 @@ export default async function AccountPage() {
         </div>
       ) : (
         <div className="mt-8 max-w-xl">
-          <form className="form-panel" action="/api/auth/login" method="post">
-            <h2 className="text-2xl font-semibold">Admin Panel</h2>
-            <input
-              name="password"
-              type="password"
-              placeholder="Admin password"
-              required
-            />
-            <button>Login</button>
-          </form>
+          <Link className="button" href="/admin/login">
+            Admin Login
+          </Link>
         </div>
       )}
     </main>

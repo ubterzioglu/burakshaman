@@ -33,6 +33,13 @@ enum ContentStatus {
   PUBLISHED
 }
 
+enum RevisionStatus {
+  OPEN
+  IN_REVIEW
+  DONE
+  ARCHIVED
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -43,6 +50,8 @@ model User {
   orders       Order[]
   bookings     Booking[]
   sessions     Session[]
+  revisions    RevisionRequest[]
+  revisionComments RevisionComment[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -201,4 +210,28 @@ model Setting {
   key       String   @id
   value     Json
   updatedAt DateTime @updatedAt
+}
+
+model RevisionRequest {
+  id          String            @id @default(cuid())
+  title       String
+  targetPath  String?
+  description String
+  priority    String            @default("normal")
+  status      RevisionStatus    @default(OPEN)
+  createdById String?
+  createdBy   User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  comments    RevisionComment[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model RevisionComment {
+  id         String          @id @default(cuid())
+  revisionId String
+  revision   RevisionRequest @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  authorId   String?
+  author     User?           @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body       String
+  createdAt  DateTime        @default(now())
 }

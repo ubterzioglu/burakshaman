@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Role } from "@prisma/client";
 import { z } from "zod";
 import { createSessionCookie, hashPassword } from "@/lib/auth";
+import { getAdminPassword } from "@/lib/admin-password";
 import { getDb } from "@/lib/db";
 import { jsonError } from "@/lib/http";
 
@@ -18,7 +19,7 @@ async function readPayload(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const payload = adminLoginSchema.parse(await readPayload(request));
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    const adminPassword = getAdminPassword();
 
     if (!adminPassword || payload.password !== adminPassword) {
       return NextResponse.json({ error: "Invalid admin password" }, { status: 401 });
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
       email: user.email,
       role: user.role,
     });
-    return NextResponse.redirect(new URL("/account", request.url), 303);
+    return NextResponse.redirect(new URL("/admin", request.url), 303);
   } catch (error) {
     return jsonError(error, 400);
   }
