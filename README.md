@@ -29,10 +29,10 @@ or `POSTGRES_URL`, but Prisma migrations are simplest when `DATABASE_URL` is set
 PayTR checkout requires `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`,
 `PAYTR_MERCHANT_SALT`, and `APP_URL`.
 
-Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before deploy. The same credentials work
-for `/account` login; on first successful admin login the app creates or updates
-that user with the `ADMIN` role. Running `pnpm db:seed` also creates the admin
-when those variables are present.
+Set `ADMIN_PASSWORD` before deploy. `/account` login uses only this password,
+without an email field. On first successful admin login the app creates or
+updates the admin user with the `ADMIN` role. `ADMIN_EMAIL` is optional and only
+sets the stored admin email; otherwise `admin@shamanlife.local` is used.
 
 ## Coolify
 
