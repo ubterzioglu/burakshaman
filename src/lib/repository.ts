@@ -1,5 +1,23 @@
-import { events, posts, products, staticPages } from "@/lib/content";
+import { events, posts, products, staticPages, trainer } from "@/lib/content";
 import { getDb, hasDatabase } from "@/lib/db";
+
+export type EventView = {
+  slug: string;
+  title: string;
+  date: string | null;
+  location: string;
+  description: string;
+  body: string;
+  image: string;
+};
+
+export type TrainerView = {
+  slug: string;
+  name: string;
+  job: string | null;
+  bio: string;
+  image: string | null;
+};
 
 export async function listProducts() {
   if (!hasDatabase()) return products;
@@ -50,7 +68,7 @@ export async function getPost(slug: string) {
   return (await listPosts()).find((post) => post.slug === slug);
 }
 
-export async function listEvents() {
+export async function listEvents(): Promise<EventView[]> {
   if (!hasDatabase()) return events;
   try {
     const dbEvents = await getDb().event.findMany({
@@ -61,12 +79,38 @@ export async function listEvents() {
       slug: event.slug,
       title: event.title,
       date: event.startsAt?.toISOString().slice(0, 10) ?? null,
-      location: event.location ?? "Online",
+      location: event.location ?? "İstanbul / Online",
       description: event.description,
+      body: event.body ?? "",
+      image: event.image ?? "/assets/hcd.jpg",
     }));
   } catch {
     return events;
   }
+}
+
+export async function getEvent(slug: string): Promise<EventView | undefined> {
+  return (await listEvents()).find((event) => event.slug === slug);
+}
+
+export async function listTrainers(): Promise<TrainerView[]> {
+  if (!hasDatabase()) return trainer ? [{ ...trainer, job: null, bio: trainer.bio, image: trainer.image ?? null }] : [];
+  try {
+    const dbTrainers = await getDb().trainer.findMany({ orderBy: { name: "asc" } });
+    return dbTrainers.map((t) => ({
+      slug: t.slug,
+      name: t.name,
+      job: t.job,
+      bio: t.bio ?? "",
+      image: t.avatar,
+    }));
+  } catch {
+    return trainer ? [{ slug: trainer.slug, name: trainer.name, job: null, bio: trainer.bio, image: trainer.image ?? null }] : [];
+  }
+}
+
+export async function getTrainer(slug: string): Promise<TrainerView | undefined> {
+  return (await listTrainers()).find((t) => t.slug === slug);
 }
 
 export async function listPages() {

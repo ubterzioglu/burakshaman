@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { site } from "@/lib/content";
+import { l, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-export function SiteFooter() {
+export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <footer className="border-t border-stone-200 bg-stone-950 text-stone-100">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 md:grid-cols-[1.3fr_0.7fr_0.7fr] lg:px-8">
@@ -29,30 +31,31 @@ export function SiteFooter() {
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-400">
-            Site
+            {dict.footer.site}
           </h3>
           <div className="mt-4 grid gap-2 text-sm text-stone-300">
-            <Link href="/about-me">About Me</Link>
-            <Link href="/classes">Classes</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/events">Events</Link>
+            <Link href={l(locale, "/about-me")}>{dict.nav.about}</Link>
+            <Link href={l(locale, "/classes")}>{dict.nav.classes}</Link>
+            <Link href={l(locale, "/trainers")}>{dict.sections.trainers}</Link>
+            <Link href={l(locale, "/blog")}>{dict.nav.blog}</Link>
+            <Link href={l(locale, "/events")}>{dict.nav.events}</Link>
           </div>
         </div>
 
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-stone-400">
-            Customer
+            {dict.footer.customer}
           </h3>
           <div className="mt-4 grid gap-2 text-sm text-stone-300">
-            <Link href="/store">E-Store</Link>
-            <Link href="/bookings">Bookings</Link>
-            <Link href="/account">My Account</Link>
-            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href={l(locale, "/store")}>{dict.nav.store}</Link>
+            <Link href={l(locale, "/bookings")}>{dict.nav.booking}</Link>
+            <Link href={l(locale, "/account")}>{dict.footer.myAccount}</Link>
+            <Link href={l(locale, "/privacy-policy")}>{dict.footer.privacy}</Link>
           </div>
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-stone-400">
-        All Rights Reserved | Shaman Coaching and Strategic Consulting
+        &copy; {site.name} — {site.owner}. {dict.footer.rights}
       </div>
     </footer>
   );

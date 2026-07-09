@@ -39,3 +39,31 @@ export const checkoutSchema = z.object({
   customerPhone: z.string().min(6).max(24),
   billingAddress: z.string().min(10).max(400),
 });
+
+export const ticketSchema = z.object({
+  name: z.string().min(2).max(80),
+  email: z.string().email().max(100),
+  phone: z.string().max(24).optional(),
+  quantity: z.coerce.number().int().min(1).max(6).default(1),
+});
+
+export const checkoutItemSchema = z.object({
+  slug: z.string().min(1).max(160),
+  quantity: z.coerce.number().int().min(1).max(10),
+});
+
+// Multi-item (cart) checkout; also accepts the legacy single-product shape.
+export const cartCheckoutSchema = z
+  .object({
+    items: z.array(checkoutItemSchema).min(1).max(20).optional(),
+    productSlug: z.string().min(1).max(160).optional(),
+    quantity: z.coerce.number().int().min(1).max(10).default(1),
+    customerName: z.string().min(2).max(80),
+    customerEmail: z.string().email().max(100),
+    customerPhone: z.string().min(6).max(24),
+    billingAddress: z.string().min(10).max(400),
+  })
+  .refine((d) => (d.items && d.items.length > 0) || d.productSlug, {
+    message: "items or productSlug is required",
+    path: ["items"],
+  });

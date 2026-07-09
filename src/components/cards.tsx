@@ -1,9 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatTry } from "@/lib/content";
+import { l, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export function ProductCard({
   product,
+  locale,
 }: {
   product: {
     slug: string;
@@ -13,7 +16,9 @@ export function ProductCard({
     description: string;
     image: string;
   };
+  locale: Locale;
 }) {
+  const dict = getDictionary(locale);
   return (
     <article className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
       <div className="relative aspect-[4/3]">
@@ -33,8 +38,8 @@ export function ProductCard({
           <span className="font-semibold text-stone-950">
             {formatTry(product.priceCents)}
           </span>
-          <Link className="button-small" href={`/store/${product.slug}`}>
-            View
+          <Link className="button-small" href={l(locale, `/store/${product.slug}`)}>
+            {dict.actions.view}
           </Link>
         </div>
       </div>
@@ -44,9 +49,12 @@ export function ProductCard({
 
 export function ServiceCard({
   service,
+  locale,
 }: {
   service: { slug: string; title: string; text: string; image: string };
+  locale: Locale;
 }) {
+  const dict = getDictionary(locale);
   return (
     <article className="group overflow-hidden rounded-lg border border-stone-200 bg-white">
       <div className="relative aspect-[4/3]">
@@ -60,8 +68,11 @@ export function ServiceCard({
       <div className="p-5">
         <h3 className="text-xl font-semibold text-stone-950">{service.title}</h3>
         <p className="mt-3 text-sm leading-6 text-stone-600">{service.text}</p>
-        <Link className="mt-5 inline-flex text-sm font-semibold text-amber-700" href="/bookings">
-          Book a session
+        <Link
+          className="mt-5 inline-flex text-sm font-semibold text-amber-700"
+          href={l(locale, "/bookings")}
+        >
+          {dict.actions.bookSession}
         </Link>
       </div>
     </article>

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
-import { products } from "@/lib/content";
 import { getDb, hasDatabase } from "@/lib/db";
 import { jsonError } from "@/lib/http";
-import { requestPaytrIframeToken } from "@/lib/paytr";
-import { checkoutSchema } from "@/lib/validators";
+import { requestPaytrIframeToken, type PaytrBasketItem } from "@/lib/paytr";
+import { listProducts } from "@/lib/repository";
+import { cartCheckoutSchema } from "@/lib/validators";
 
 function clientIp(request: NextRequest) {
   return (
@@ -16,11 +16,7 @@ function clientIp(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const payload = checkoutSchema.parse(await request.json());
-    const product = products.find((item) => item.slug === payload.productSlug);
-    if (!product) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
+    const payload = cartCheckoutSchema.parse(await request.json());
     if (!hasDatabase()) {
       return NextResponse.json(
         { error: "DATABASE_URL is required to create orders." },
@@ -28,10 +24,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const totalCents = product.priceCents * payload.quantity;
+    // Resolve requested line items against the catalogue (DB-backed via repository).
+    const catalogue = await listProducts();
+    const requested =
+      payload.items && payload.items.length > 0
+        ? payload.items
+        : [{ slug: payload.productSlug as string, quantity: payload.quantity }];
+
+    const lineItems = requested.map((item) => {
+      const product = catalogue.find((p) => p.slug === item.slug);
+      if (!product) return null;
+      return {
+        slug: product.slug,
+        name: product.name,
+        unitCents: product.priceCents,
+        quantity: item.quantity,
+      };
+    });
+
+    if (lineItems.some((i) => i === null)) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    const items = lineItems as NonNullable<(typeof lineItems)[number]>[];
+
+    const totalCents = items.reduce((sum, i) => sum + i.unitCents * i.quantity, 0);
     const merchantOid = `SL${Date.now()}`;
     const db = getDb();
     const session = await getSession();
+
+    // Link DB product ids where available.
+    const dbProducts = await db.product.findMany({
+      where: { slug: { in: items.map((i) => i.slug) } },
+      select: { id: true, slug: true },
+    });
+    const idBySlug = new Map(dbProducts.map((p) => [p.slug, p.id]));
+
     const order = await db.order.create({
       data: {
         merchantOid,
@@ -42,27 +69,34 @@ export async function POST(request: NextRequest) {
         billingAddress: payload.billingAddress,
         totalCents,
         items: {
-          create: {
-            name: product.name,
-            unitCents: product.priceCents,
-            quantity: payload.quantity,
-          },
+          create: items.map((i) => ({
+            productId: idBySlug.get(i.slug),
+            name: i.name,
+            unitCents: i.unitCents,
+            quantity: i.quantity,
+          })),
         },
       },
     });
+
+    const userBasket: PaytrBasketItem[] = items.map((i) => [
+      i.name,
+      (i.unitCents / 100).toFixed(2),
+      i.quantity,
+    ]);
 
     const appUrl = process.env.APP_URL ?? new URL(request.url).origin;
     const iframeToken = await requestPaytrIframeToken({
       merchantOid,
       email: payload.customerEmail,
       paymentAmount: totalCents,
-      userBasket: [[product.name, (product.priceCents / 100).toFixed(2), payload.quantity]],
+      userBasket,
       userName: payload.customerName,
       userAddress: payload.billingAddress,
       userPhone: payload.customerPhone,
       userIp: clientIp(request),
-      okUrl: `${appUrl}/account`,
-      failUrl: `${appUrl}/checkout`,
+      okUrl: `${appUrl}/tr/account`,
+      failUrl: `${appUrl}/tr/checkout`,
     });
 
     await db.payment.create({

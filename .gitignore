@@ -36,6 +36,7 @@ yarn-error.log*
 
 # legacy hosting / WordPress source dump
 /public_html/
+/ref/
 /.trash/
 /.bash_logout
 /.bash_profile
@@ -54,3 +55,4 @@ error_log
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+

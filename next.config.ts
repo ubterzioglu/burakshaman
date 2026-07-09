@@ -6,15 +6,15 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   async redirects() {
+    // Legacy WordPress URLs whose slug CHANGED -> new locale-prefixed routes.
+    // Same-name Turkish slugs (kitaplar, kocluk-hizmetleri, ...) are real pages now
+    // and the proxy adds the default locale automatically, so they need no entry here.
     return [
-      { source: "/magaza", destination: "/store", permanent: true },
-      { source: "/iletisim", destination: "/contact", permanent: true },
-      { source: "/egitimler", destination: "/classes", permanent: true },
-      { source: "/etkinlikler", destination: "/events", permanent: true },
-      { source: "/kitaplar", destination: "/books", permanent: true },
-      { source: "/kocluk-hizmetleri", destination: "/coaching", permanent: true },
-      { source: "/product/:slug", destination: "/store/:slug", permanent: true },
-      { source: "/en", destination: "/", permanent: false },
+      { source: "/magaza", destination: "/tr/store", permanent: true },
+      { source: "/iletisim", destination: "/tr/contact", permanent: true },
+      { source: "/egitimler", destination: "/tr/classes", permanent: true },
+      { source: "/etkinlikler", destination: "/tr/events", permanent: true },
+      { source: "/product/:slug", destination: "/tr/store/:slug", permanent: true },
     ];
   },
 };

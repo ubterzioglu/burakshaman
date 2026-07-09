@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shaman Life — lastref → Next.js Fonksiyonel Uyum Raporu</title>
+<style>
+  :root{
+    --bg:#faf8f5; --panel:#ffffff; --ink:#1c1917; --muted:#57534e; --line:#e7e2db;
+    --amber:#b45309; --amber-soft:#fef3c7; --green:#15803d; --green-soft:#dcfce7;
+    --yellow:#a16207; --yellow-soft:#fef9c3; --gray:#6b7280; --gray-soft:#f1f0ee;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1a1816; --panel:#232019; --ink:#f5f0e8; --muted:#a8a29e; --line:#3a352d;
+      --amber:#fbbf24; --amber-soft:#3a2c10; --green:#4ade80; --green-soft:#10281a;
+      --yellow:#fde047; --yellow-soft:#2a2410; --gray:#9ca3af; --gray-soft:#2a2620; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:48px 22px 80px}
+  header.hero{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:34px}
+  .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:12px;font-weight:700;color:var(--amber)}
+  h1{font-size:32px;line-height:1.15;margin:12px 0 8px}
+  h2{font-size:23px;margin:44px 0 14px;padding-top:14px;border-top:2px solid var(--line)}
+  h3{font-size:17px;margin:22px 0 8px}
+  p{color:var(--ink)} .muted{color:var(--muted)}
+  .lead{font-size:18px;color:var(--muted);max-width:70ch}
+  .grid{display:grid;gap:14px}
+  @media(min-width:640px){.grid.cols-2{grid-template-columns:1fr 1fr}.grid.cols-3{grid-template-columns:1fr 1fr 1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat{font-size:30px;font-weight:700;line-height:1}
+  .stat + .l{color:var(--muted);font-size:13px;margin-top:6px}
+  ul{margin:8px 0;padding-inline-start:20px} li{margin:5px 0}
+  code{background:var(--gray-soft);padding:1px 6px;border-radius:5px;font-size:13px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .t-done{background:var(--green-soft);color:var(--green)}
+  .t-part{background:var(--yellow-soft);color:var(--yellow)}
+  .t-next{background:var(--gray-soft);color:var(--gray)}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+  tr:last-child td{border-bottom:none}
+  .files{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+  .files li{margin:3px 0}
+  .note{background:var(--amber-soft);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:18px 0}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  .kpi{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);margin:22px 0}
+  @media(min-width:640px){.kpi{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Shaman Life · Durum Raporu</div>
+    <h1>lastref (WordPress) → Next.js Fonksiyonel Uyum Raporu</h1>
+    <p class="lead">Eski <strong>shamanlife.com</strong> (WordPress · helix teması · WPBakery · WooCommerce · BookingPress · EventPrime · Polylang) sitesinin özellikleri analiz edildi ve mevcut yeni teknoloji projesine (<strong>Next.js 16 · React 19 · Tailwind 4 · Prisma/PostgreSQL · PayTR</strong>) fonksiyonel olarak taşındı. Eski teknoloji stack'i birebir kopyalanmadı; mevcut modern mimari korundu.</p>
+  </header>
+
+  <div class="kpi">
+    <div class="card"><div class="stat">~44</div><div class="l">gerçek içerik (cache'ten göç)</div></div>
+    <div class="card"><div class="stat">TR + EN</div><div class="l">çift dilli arayüz + route</div></div>
+    <div class="card"><div class="stat">60+</div><div class="l">build edilen route</div></div>
+    <div class="card"><div class="stat">Yeşil</div><div class="l">build + lint durumu</div></div>
+  </div>
+
+  <h2>1. Genel Özet</h2>
+  <p>Amaç, iki projeyi <strong>fonksiyonel olarak eşitlemekti</strong>. Referans (<code>ref/</code>) klasöründe SQL/WXR dökümü yoktu; ancak site <strong>WP Rocket</strong> ile çalıştığından tüm sayfalar cache'te tam olarak render edilmiş HTML olarak duruyordu (<code>ref/_/public_html/wp-content/cache/wp-rocket/…</code>). Bu sayede gerçek içerik (bloglar, ürünler, sayfalar, etkinlikler, eğitmen ve görseller) çıkarılıp yeni içerik modeline aktarıldı.</p>
+  <p>Bu turda tamamlanan ana başlıklar: <strong>çift dilli (TR/EN) yapı</strong>, <strong>gerçek içerik göçü</strong>, <strong>sepet + çok kalemli PayTR ödemesi</strong>, <strong>etkinlik detay + biletleme</strong>, <strong>eğitmen profilleri</strong>, <strong>mobil menü / WhatsApp butonu</strong> ve <strong>veri modelinin genişletilmesi</strong>. Proje boyunca build ve lint yeşil tutuldu; commit atılmadı, silme yapılmadı (sayfalar yalnızca <code>[locale]/</code> altına taşındı).</p>
+
+  <h2>2. lastref'te Bulunan Özellikler (Referans)</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Alan</th><th>Eski teknoloji</th></tr></thead>
+    <tbody>
+      <tr><td>Sayfa yapısı</td><td>WPBakery Page Builder (Elementor değil) + Slider Revolution</td></tr>
+      <tr><td>İçerik tipleri</td><td>helix teması: <code>class</code>, <code>events</code> CPT + <code>trainer/level/room/location/price</code> taksonomileri</td></tr>
+      <tr><td>Mağaza</td><td>WooCommerce (ürün, varyasyon/eklenti, sepet, checkout, yorum, ilgili ürün) + PayTR iframe</td></tr>
+      <tr><td>Randevu</td><td>BookingPress (hizmet → slot → ödeme, "Randevularım")</td></tr>
+      <tr><td>Bilet</td><td>EventPrime (etkinlik bileti + QR, WooCommerce checkout entegrasyonu)</td></tr>
+      <tr><td>Takvim</td><td>FullCalendar ile haftalık tekrarlı ders programı (AJAX)</td></tr>
+      <tr><td>Diller</td><td>Polylang — TR birincil + RU; dil değiştirici</td></tr>
+      <tr><td>İletişim / bülten</td><td>Contact Form 7 / WPForms, Newsletter eklentisi, WhatsApp sticky buton</td></tr>
+      <tr><td>Ana sayfa blokları</td><td>hero, hakkında, eğitim filtresi, eğitmenler, yorumlar, üyelik/fiyat tabloları, galeri, harita</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>3. Bizim Projede Zaten Mevcut Olanlar (Başlangıç)</h2>
+  <ul>
+    <li>Next.js App Router yapısı: ana sayfa, blog, mağaza, etkinlik, iletişim, hesap, admin, admin login.</li>
+    <li>Prisma modelleri (User, Product, Order, Booking, Event, Post, Page, ContactMessage, NewsletterSubscriber, RevisionRequest…).</li>
+    <li>PayTR iframe ödeme altyapısı, iletişim/bülten/rezervasyon formları, admin revizyon iş akışı.</li>
+    <li>Veritabanısız zarif düşüş (DB yoksa <code>content.ts</code> statik içeriğe düşme).</li>
+  </ul>
+
+  <h2>4. Bu Turda Tamamlananlar</h2>
+
+  <h3>Çift dilli yapı (TR + EN) <span class="tag t-done">Tamamlandı</span></h3>
+  <ul>
+    <li>Tüm sayfalar <code>src/app/[locale]/</code> altına taşındı; <code>src/proxy.ts</code> yerel ön ek olmayan istekleri varsayılan dile (TR) yönlendiriyor.</li>
+    <li>Sözlük tabanlı arayüz çevirisi (<code>src/lib/i18n/</code>), <code>LocaleSwitcher</code> (TR/EN) header'da; footer/header/kartlar dile duyarlı.</li>
+    <li>Doğrulandı: <code>/</code> → <code>/tr</code>, <code>/tr</code> Türkçe, <code>/en</code> İngilizce arayüz.</li>
+  </ul>
+
+  <h3>Gerçek içerik göçü <span class="tag t-done">Tamamlandı</span></h3>
+  <ul>
+    <li>WP Rocket HTML cache'inden çıkarıcı script (<code>scripts/extract-content.ts</code>, <code>build-content-data.ts</code>) ile:
+      <strong>18 blog yazısı, 6 ürün (fiyatlarıyla), 5 etkinlik, 10+ sayfa, 1 eğitmen profili</strong> ve ~20 görsel (<code>public/assets/wp/</code>).</li>
+    <li>İçerik HTML olarak temizlenip (WPBakery sarmalayıcıları ve inline stiller çıkarıldı) <code>content-data.ts</code> → <code>content.ts</code> (statik fallback) ve <code>prisma/seed.ts</code>'e (DB) aktarıldı.</li>
+    <li>Blog gövdesi artık tek <code>&lt;p&gt;</code> değil, güvenli HTML olarak render ediliyor (<code>HtmlContent</code>). Türkçe slug'lar korundu.</li>
+  </ul>
+
+  <h3>Mağaza: sepet + çok kalemli ödeme <span class="tag t-done">Tamamlandı</span></h3>
+  <ul>
+    <li>İstemci sepeti (<code>src/lib/cart.tsx</code>, localStorage), header'da mini-cart rozeti, <code>/cart</code> ve <code>/checkout</code> sayfaları.</li>
+    <li>Ürün sayfasında "Sepete Ekle" / "Satın Al"; checkout tek PayTR token ile çok kalemli sepeti işliyor.</li>
+    <li><strong>Hata giderildi:</strong> checkout eskiden statik <code>content.ts</code>'e göre doğruluyordu; artık DB ürünlerini kullanıyor.</li>
+  </ul>
+
+  <h3>Etkinlik detay + biletleme <span class="tag t-done">Tamamlandı</span></h3>
+  <ul>
+    <li>Etkinlik arşivi görselli kartlara dönüştü; <code>/events/[slug]</code> detay sayfası (görsel + içerik) eklendi.</li>
+    <li>Bilet oluşturma: <code>/api/events/[slug]/tickets</code> benzersiz kodlu <code>Ticket</code> kayıtları üretir ve e-posta gönderir.</li>
+  </ul>
+
+  <h3>Eğitmenler, ana sayfa, chrome <span class="tag t-done">Tamamlandı</span></h3>
+  <ul>
+    <li>Eğitmen dizini + profil sayfaları (<code>/trainers</code>, <code>/trainers/[slug]</code>).</li>
+    <li>Ana sayfa gerçek Türkçe içerikle yeniden düzenlendi; başlıklar/hero dile duyarlı; etkinlik/blog bölümleri gerçek verilerle.</li>
+    <li>Mobil navigasyon menüsü, sticky <strong>WhatsApp</strong> butonu, hesap sayfası başlık hatası düzeltildi.</li>
+  </ul>
+
+  <h3>Veri modeli genişletildi <span class="tag t-done">Tamamlandı</span></h3>
+  <p class="muted">Prisma şemasına eklenen modeller (parite için, EN çeviri alanlarıyla):
+  <code>Trainer</code>, <code>Level</code>, <code>Room</code>, <code>Class</code>, <code>EventSession</code>, <code>Ticket</code>,
+  <code>ServiceCategory</code>, <code>Service</code>, <code>AvailabilitySlot</code>, <code>PostComment</code>,
+  <code>Testimonial</code>, <code>MembershipPlan</code>; <code>Event</code>/<code>Product</code>/<code>Post</code>/<code>Page</code> alanları genişletildi.</p>
+
+  <h2>5. Route Bazlı Karşılaştırma (Ne Aldık / Ne Alamadık)</h2>
+  <p class="muted">Eski sitenin URL'leri ile yeni projedeki route'lar. Varsayılan dil TR olduğundan yeni yollar <code>/tr/…</code> ön ekli; <code>/en/…</code> aynı yapıda mevcuttur.</p>
+
+  <h3>✅ Aldıklarımız <span class="tag t-done">37+ route</span></h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Eski route (lastref)</th><th>Yeni route</th><th>Durum</th></tr></thead>
+    <tbody>
+      <tr><td><code>/</code> (ana sayfa)</td><td><code>/tr</code>, <code>/en</code></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/blog</code></td><td><code>/tr/blog</code></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/magaza</code></td><td><code>/tr/store</code> <span class="muted">(301 yönlendirme)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/etkinlikler</code></td><td><code>/tr/events</code> <span class="muted">(301)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/iletisim</code></td><td><code>/tr/contact</code> <span class="muted">(301)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/egitimler</code></td><td><code>/tr/classes</code> <span class="muted">(301)</span></td><td><span class="tag t-part">Kısmi</span></td></tr>
+      <tr><td><code>/trainer</code> (dizin)</td><td><code>/tr/trainers</code></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/trainer/burak-akcakanat</code></td><td><code>/tr/trainers/burak-akcakanat</code></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/kitaplar</code>, <code>/kocluk-hizmetleri</code>, <code>/online-kocluk</code>, <code>/integral-coaching</code>, <code>/tamamlayici-kocluk</code>, <code>/holistic-guidance</code>, <code>/ozel-randevular</code>, <code>/protagoras</code>, <code>/gizlilik-ve-cerezler</code>, <code>/satis-politikasi</code></td><td><code>/tr/&lt;slug&gt;</code> <span class="muted">(10 sayfa)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/product/liderlik-101</code>, <code>/lider-koclugu</code>, <code>/interactive-brokers-…</code>, <code>/hcd-ciltli</code>, <code>/hcd-e-kitap</code>, <code>/hcd-kagit-kapak</code></td><td><code>/tr/store/&lt;slug&gt;</code> <span class="muted">(6 ürün, fiyatlı)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td><code>/event/isiga-yolculuk</code>, <code>/bilinc-seviyeleri-calismasi</code>, <code>/duygularin-sifresini-cozuyoruz</code>, <code>/ergen-iletisimi</code>, <code>/film-atolyesi</code></td><td><code>/tr/events/&lt;slug&gt;</code> <span class="muted">(5 etkinlik)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+      <tr><td>Blog yazıları: <code>/kaos</code>, <code>/cymatics</code>, <code>/dinlemek</code>, <code>/duyular-ve-plastisite</code>, <code>/savasci-lider</code>, <code>/turkiyem-memleketim</code>, <code>/universal-law-of-achivement</code>, <code>/kendini-kesfetme-yolculugu</code>, <code>/beden-dilimiz-…</code>, <code>/cocuk-ve-ergenlerde-…</code>, <code>/find-a-way-…</code>, <code>/genc-liderler-…</code>, <code>/yaratim-surecinde-…</code>, <code>/yasam-alanlari-…</code></td><td><code>/tr/blog/&lt;slug&gt;</code> <span class="muted">(14–15 yazı, tam metin)</span></td><td><span class="tag t-done">Tam</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>➕ Yeni eklenen route'lar <span class="muted">(eski sitede yoktu / farklı teknolojiydi)</span></h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Yeni route</th><th>İşlev</th></tr></thead>
+    <tbody>
+      <tr><td><code>/tr/cart</code>, <code>/tr/checkout</code></td><td>Sepet + çok kalemli PayTR ödemesi (eski WooCommerce sepetinin yeni karşılığı)</td></tr>
+      <tr><td><code>/en/…</code></td><td>Tüm sitenin İngilizce arayüz kopyası (dil değiştirici)</td></tr>
+      <tr><td><code>/tr/account</code></td><td>Müşteri hesabı — sipariş/rezervasyon geçmişi</td></tr>
+      <tr><td><code>/tr/bookings</code></td><td>Randevu talep formu</td></tr>
+      <tr><td><code>/tr/admin</code>, <code>/tr/admin/login</code></td><td>Yönetim paneli + durum panosu</td></tr>
+      <tr><td><code>/api/events/[slug]/tickets</code></td><td>Etkinlik bileti oluşturma (kodlu bilet)</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>❌ Alamadıklarımız / kısmi kalanlar</h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Eski route / özellik</th><th>Durum</th><th>Neden</th></tr></thead>
+    <tbody>
+      <tr><td><code>/hayatinizi-degisterecek-bir-konusma</code>, <code>/haz-almanin-kokeni</code>, <code>/sir-ken-robinson-yaratacilik-uzerine-ii</code></td><td><span class="tag t-part">Kısmi</span></td><td>3 blog yazısı: gövdesi gömülü video olduğundan yalnızca başlık/görsel alındı, metin yok.</td></tr>
+      <tr><td><code>/product-category/fiziksel-urunler</code></td><td><span class="tag t-part">Kısmi</span></td><td>Ürün kategori arşiv route'u yok; mağaza var fakat kategoriye göre filtreli liste route'u eklenmedi.</td></tr>
+      <tr><td><code>/author/admin</code>, <code>/…/page/N</code></td><td><span class="tag t-next">Alınmadı</span></td><td>Yazar arşivi ve sayfalama route'ları taşınmadı (gereksiz).</td></tr>
+      <tr><td>Ders programı takvimi (<code>helix_fullCalendar</code>)</td><td><span class="tag t-part">Kısmi</span></td><td>Şema hazır; cache'te haftalık ders programı verisi olmadığından route beslenemedi.</td></tr>
+      <tr><td>Slot bazlı randevu (BookingPress)</td><td><span class="tag t-part">Kısmi</span></td><td><code>Service/AvailabilitySlot</code> şeması var; şimdilik yalnızca basit <code>/tr/bookings</code> formu.</td></tr>
+      <tr><td>Etkinlik kesin tarih / oturum tablosu / harita</td><td><span class="tag t-part">Kısmi</span></td><td>Başlık, görsel, gövde alındı; kesin tarih/oturum/harita helix+EventPrime karışık işaretlemesi nedeniyle çıkarılamadı.</td></tr>
+      <tr><td>Blog yorum formu</td><td><span class="tag t-part">Kısmi</span></td><td><code>PostComment</code> modeli hazır; form/moderasyon route'u bağlanmadı.</td></tr>
+      <tr><td>Rusça <code>/ru/…</code></td><td><span class="tag t-next">Alınmadı</span></td><td>i18n RU'ya hazır; yalnızca TR+EN bağlandı.</td></tr>
+      <tr><td>Yalnızca DB'de olan / cache'lenmemiş sayfalar</td><td><span class="tag t-next">Alınamadı</span></td><td>WP Rocket hiç cache'lemediği sayfalar dosyalardan kurtarılamaz; gerçek DB dump gerekir.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>6. Kısmen Yapılanlar / Sonraki Adımlar</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Başlık</th><th>Durum</th><th>Açıklama</th></tr></thead>
+    <tbody>
+      <tr><td>Admin CRUD arayüzü</td><td><span class="tag t-part">Kısmen</span></td><td>API uçları ve gösterge paneli var; içerik tipleri için tam liste/düzenle formları eklenecek. Admin durum panosu güncellendi.</td></tr>
+      <tr><td>Randevu (slot) sistemi</td><td><span class="tag t-part">Kısmen</span></td><td><code>Service/AvailabilitySlot</code> şeması hazır; mevcut basit randevu formu çalışıyor. BookingPress benzeri slot seçici sonraki adım.</td></tr>
+      <tr><td>Ders programı takvimi</td><td><span class="tag t-part">Kısmen</span></td><td>Şema hazır; ancak cache'te haftalık ders programı verisi yok, bu yüzden takvim boş. Veri girilince aktif olur.</td></tr>
+      <tr><td>Blog yorumları</td><td><span class="tag t-part">Kısmen</span></td><td><code>PostComment</code> modeli hazır; form + moderasyon bağlanacak.</td></tr>
+      <tr><td>Etkinlik biletinde QR görseli</td><td><span class="tag t-part">Kısmen</span></td><td>Bilet kodu üretiliyor; QR bitmap için <code>qrcode</code> paketi gerekli (pnpm store sürüm uyumsuzluğu nedeniyle şimdilik eklenmedi).</td></tr>
+      <tr><td>Rusça (RU) dili</td><td><span class="tag t-next">Sonra</span></td><td>Şema/i18n RU'ya hazır; yalnızca TR+EN bağlandı.</td></tr>
+      <tr><td>Bülten kampanya gönderimi</td><td><span class="tag t-next">Sonra</span></td><td>Abonelik çalışıyor; toplu kampanya gönderimi kapsam dışı.</td></tr>
+      <tr><td>EN içerik çevirisi</td><td><span class="tag t-next">Sonra</span></td><td>Cache'te EN kısmi olduğundan TR tam, EN eksik sayfalar için manuel çeviri gerekir.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>7. Tamamlanamayan / Emin Olunamayan Noktalar</h2>
+  <ul>
+    <li><strong>Ders programı verisi:</strong> Site esasen koçluk/danışmanlık odaklı; cache'te helix "class" haftalık program verisi yok. Takvim özelliği kod olarak hazır fakat besleyecek veri yok.</li>
+    <li><strong>Etkinlik tarih/oturum/harita detayları:</strong> Etkinlik başlığı, görseli ve gövdesi güvenle çıkarıldı; kesin tarih, oturum tablosu ve harita koordinatları helix/EventPrime karışık işaretlemesi nedeniyle kısmen elde edildi.</li>
+    <li><strong>Sadece DB'de olan içerik:</strong> WP Rocket tarafından hiç cache'lenmemiş (yayında olmayan/az ziyaret edilen) sayfalar dosyalardan kurtarılamaz; yalnızca gerçek bir DB dump ile gelir.</li>
+    <li><strong>WooCommerce geçmişi:</strong> Eski müşteri/sipariş/indirilebilir ürün geçmişi dump olmadan aktarılamadı (yeni model hazır).</li>
+  </ul>
+
+  <h2>8. Değiştirilen / Eklenen Dosyalar</h2>
+  <p class="muted">Not: <code>src/app/*/page.tsx</code> dosyaları silinmedi; <code>src/app/[locale]/</code> altına <em>taşındı</em> (git bunları "silme + yeni" olarak gösterir).</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3 style="margin-top:0">Yeni dosyalar</h3>
+      <ul class="files">
+        <li>src/proxy.ts</li>
+        <li>src/lib/i18n/config.ts</li>
+        <li>src/lib/i18n/dictionaries.ts</li>
+        <li>src/lib/cart.tsx</li>
+        <li>src/lib/content-data.ts <span class="muted">(üretilen)</span></li>
+        <li>src/components/locale-switcher.tsx</li>
+        <li>src/components/whatsapp-button.tsx</li>
+        <li>src/components/html-content.tsx</li>
+        <li>src/components/add-to-cart.tsx</li>
+        <li>src/components/checkout-client.tsx</li>
+        <li>src/components/ticket-form.tsx</li>
+        <li>src/app/[locale]/** <span class="muted">(tüm sayfalar)</span></li>
+        <li>src/app/[locale]/cart/page.tsx</li>
+        <li>src/app/[locale]/trainers/**</li>
+        <li>src/app/[locale]/events/[slug]/page.tsx</li>
+        <li>src/app/api/events/[slug]/tickets/route.ts</li>
+        <li>scripts/extract-content.ts</li>
+        <li>scripts/build-content-data.ts</li>
+        <li>public/assets/wp/** <span class="muted">(görseller)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Değiştirilen dosyalar</h3>
+      <ul class="files">
+        <li>prisma/schema.prisma <span class="muted">(12+ yeni model)</span></li>
+        <li>prisma/seed.ts <span class="muted">(gerçek içerik + eğitmen)</span></li>
+        <li>next.config.ts <span class="muted">(locale yönlendirmeleri)</span></li>
+        <li>src/lib/content.ts</li>
+        <li>src/lib/repository.ts <span class="muted">(event/trainer)</span></li>
+        <li>src/lib/validators.ts <span class="muted">(cart/ticket)</span></li>
+        <li>src/components/site-header.tsx <span class="muted">(mobil menü, sepet, dil)</span></li>
+        <li>src/components/site-footer.tsx</li>
+        <li>src/components/cards.tsx</li>
+        <li>src/app/api/checkout/route.ts <span class="muted">(çok kalemli, DB)</span></li>
+        <li>src/app/[locale]/page.tsx <span class="muted">(yerelleştirme)</span></li>
+        <li>src/app/[locale]/admin/page.tsx <span class="muted">(durum panosu)</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>9. Riskler ve Önerilen Sonraki Adımlar</h2>
+  <ul>
+    <li><strong>Veritabanı göçü:</strong> Şemaya çok sayıda model eklendi. Supabase'de <code>npx prisma migrate deploy</code> ve <code>npm run db:seed</code> çalıştırılmalı (seed aynı gerçek içeriği yükler). Yerelde DB olmadığından uygulama fallback içerikle çalışıyor.</li>
+    <li><strong>PayTR:</strong> Test modunda (<code>PAYTR_TEST_MODE=1</code>). Canlıya almadan uçtan uca token akışı doğrulanmalı; <code>okUrl/failUrl</code> artık <code>/tr/…</code>.</li>
+    <li><strong>EN içerik:</strong> Arayüz TR/EN; içerik TR tam, EN kısmi. EN sayfaların manuel çevirisi önerilir.</li>
+    <li><strong>Bilet QR görseli:</strong> <code>qrcode</code> paketi eklenip bilet kodları QR olarak render edilebilir.</li>
+    <li><strong>Sonraki fazlar:</strong> Admin tam CRUD arayüzü, slot bazlı randevu seçici, blog yorum formu, (veri gelirse) ders programı takvimi.</li>
+    <li><strong>Doğrulama:</strong> <code>npm run build</code> ve <code>npx eslint src</code> yeşil; TR/EN ana sayfa, mağaza+ürün, blog+yazı, etkinlik+detay+bilet, eğitmen, sepet, checkout, hesap ve admin login route'ları 200 döndü.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Özet:</strong> Site artık gerçek Türkçe içerikle, çift dilli, sepetli/ödemeli, etkinlik biletli ve eğitmen profilli olarak yeni Next.js mimarisinde çalışıyor. Eski WordPress/WPBakery/eklenti bağımlılıkları taşınmadı; fonksiyonel uyum modern stack korunarak sağlandı. Kalan başlıklar (admin CRUD, slot randevu, takvim, RU) belgelenerek sonraki adımlara bırakıldı.
+  </div>
+
+  <footer>
+    Shaman Life · lastref → Next.js fonksiyonel uyum raporu · Bu belge <code>docs/lastref-parity-report.html</code> olarak proje içinde tutulur.
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,3 +1,11 @@
+import {
+  realProducts,
+  realPosts,
+  realPages,
+  realEvents,
+  realTrainer,
+} from "./content-data";
+
 export type ProductSeed = {
   slug: string;
   name: string;
@@ -7,6 +15,8 @@ export type ProductSeed = {
   image: string;
   digital: boolean;
 };
+
+const FALLBACK_IMAGE = "/assets/hcd.jpg";
 
 export const site = {
   name: "Shaman Life",
@@ -33,38 +43,21 @@ export const aboutParagraphs = [
   "Human Consciousness Decoded is the nucleus of this work: a holistic approach that treats people within the fabric of the universe they inhabit and helps clients navigate self-discovery, growth and potential.",
 ];
 
-export const products: ProductSeed[] = [
-  {
-    slug: "interactive-brokers-investment-portfolio-guide",
-    name: "Interactive Brokers and Investment Portfolio Set up Guide",
-    category: "Digital Products",
-    priceCents: 2400000,
-    description:
-      "A practical digital guide for investment portfolio setup and operational discipline.",
-    image: "/assets/hcd.jpg",
-    digital: true,
-  },
-  {
-    slug: "liderlik-101",
-    name: "Liderlik 101",
-    category: "Digital Products",
-    priceCents: 594000,
-    description:
-      "Leadership fundamentals for young leaders, managers and professionals.",
-    image: "/assets/integral-coaching.jpg",
-    digital: true,
-  },
-  {
-    slug: "lider-koclugu",
-    name: "Lider Koclugu",
-    category: "Digital Products",
-    priceCents: 495000,
-    description:
-      "A focused leadership coaching product for decision makers and teams.",
-    image: "/assets/coaching.jpg",
-    digital: true,
-  },
+export const aboutParagraphsTr = [
+  "Burak Akçakanat'ın 30 yılı aşkın deneyime dayanan son 20 yıllık iş hayatı; bireylere, profesyonellere ve kurumlara sunulan koçluk, rehberlik ve eğitim hizmetlerinden oluşmaktadır.",
+  "ODTÜ Endüstriyel Tasarım temeli ile Yaşam, Yönetici ve Kurumsal Koçluk sertifikalarını birleştiren çalışması; psikoloji, felsefe, nöroloji, biyoloji, fizik, mistik gelenekler ve insan bilinci çalışmalarını bir araya getirir.",
+  "Human Consciousness Decoded bu çalışmanın çekirdeğidir: insanı içinde yaşadığı evrenin dokusuyla birlikte ele alan, danışanların kendini keşif, gelişim ve potansiyel yolculuğunda rehberlik eden bütünsel bir yaklaşımdır.",
 ];
+
+export const products: ProductSeed[] = realProducts.map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  category: p.category,
+  priceCents: p.priceCents,
+  description: p.description,
+  image: p.image ?? FALLBACK_IMAGE,
+  digital: p.digital,
+}));
 
 export const services = [
   {
@@ -87,48 +80,41 @@ export const services = [
   },
 ];
 
-export const posts = [
-  {
-    slug: "human-consciousness-decoded",
-    title: "Human Consciousness Decoded",
-    excerpt: "A powerful method to unravel the functions of consciousness.",
-    body: "Human Consciousness Decoded creates a map for understanding awareness, behavior, patterns and transformation. This rebuilt article preserves the public-facing content direction while moving the site to a maintainable content model.",
-    image: "/assets/hcd.jpg",
-  },
-  {
-    slug: "balance-of-life-areas",
-    title: "Life Areas Balance and Reflections at Work",
-    excerpt: "How life balance becomes visible in professional behavior.",
-    body: "Personal balance, leadership, communication and decision making are connected. This post introduces the coaching perspective used across Shaman Life programs.",
-    image: "/assets/coaching.jpg",
-  },
-  {
-    slug: "find-a-way",
-    title: "Find a Way",
-    excerpt: "A coaching note on choice, persistence and inner direction.",
-    body: "The process starts by clarifying the current reality, locating the repeating pattern and choosing the next concrete step.",
-    image: "/assets/integral-coaching.jpg",
-  },
-];
+export type PostSeed = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  image: string;
+};
 
-export const events = [
-  {
-    slug: "liderlik-101",
-    title: "Liderlik 101",
-    date: "2024-05-30",
-    location: "Online",
-    description:
-      "A leadership training program for professionals who want a clear working foundation.",
-  },
-  {
-    slug: "bilinc-seviyeleri-calismasi",
-    title: "Bilinc Seviyeleri Calismasi",
-    date: null,
-    location: "Istanbul / Online",
-    description:
-      "A recurring consciousness-level study connected to the HCD approach.",
-  },
-];
+export const posts: PostSeed[] = realPosts.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  excerpt: p.excerpt,
+  body: p.body,
+  image: p.image ?? FALLBACK_IMAGE,
+}));
+
+export type EventSeed = {
+  slug: string;
+  title: string;
+  date: string | null;
+  location: string;
+  description: string;
+  body: string;
+  image: string;
+};
+
+export const events: EventSeed[] = realEvents.map((e) => ({
+  slug: e.slug,
+  title: e.title,
+  date: null,
+  location: "İstanbul / Online",
+  description: e.description,
+  body: e.body,
+  image: e.image ?? FALLBACK_IMAGE,
+}));
 
 export const testimonials = [
   {
@@ -148,33 +134,33 @@ export const testimonials = [
   },
 ];
 
-export const staticPages = [
+export type PageSeed = { slug: string; title: string; body: string };
+
+// Synthetic nav pages kept for header/footer links, then merged with the real
+// pages recovered from the WordPress cache (Turkish slugs).
+const syntheticPages: PageSeed[] = [
   {
     slug: "about-me",
-    title: "About Me",
-    body: aboutParagraphs.join("\n\n"),
-  },
-  {
-    slug: "coaching",
-    title: "Coaching",
-    body: "We help you shape your life with holistic coaching activities, personal guidance and structured development programs.",
-  },
-  {
-    slug: "books",
-    title: "Books",
-    body: "Human Consciousness Decoded and related publications are available through the Shaman Life store.",
-  },
-  {
-    slug: "privacy-policy",
-    title: "Privacy Policy",
-    body: "Personal data collected through forms, checkout and booking flows is used only to provide the requested service and manage customer communication.",
-  },
-  {
-    slug: "terms-of-use",
-    title: "Terms of Use",
-    body: "By using this website, customers accept the service, booking and digital product conditions published by Shaman Life.",
+    title: "Hakkımda",
+    body:
+      "<p>" + aboutParagraphs.join("</p><p>") + "</p>",
   },
 ];
+
+const extractedPages: PageSeed[] = realPages.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  body: p.body,
+}));
+
+export const staticPages: PageSeed[] = [
+  ...syntheticPages,
+  ...extractedPages.filter(
+    (p) => !syntheticPages.some((s) => s.slug === p.slug),
+  ),
+];
+
+export const trainer = realTrainer;
 
 export const redirects = [
   { source: "/magaza", destination: "/store", permanent: true },

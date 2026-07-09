@@ -69,26 +69,34 @@ model Category {
   id          String    @id @default(cuid())
   slug        String    @unique
   name        String
+  nameEn      String?
   description String?
   products    Product[]
   posts       Post[]
+  classes     Class[]
 }
 
 model Product {
-  id          String      @id @default(cuid())
-  slug        String      @unique
-  name        String
-  description String
-  priceCents  Int
-  currency    String      @default("TRY")
-  image       String?
-  digital     Boolean     @default(false)
-  active      Boolean     @default(true)
-  categoryId  String?
-  category    Category?   @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  name          String
+  nameEn        String?
+  description   String
+  descriptionEn String?
+  priceCents    Int
+  currency      String      @default("TRY")
+  image         String?
+  gallery       Json?
+  addons        Json?
+  productType   String      @default("simple") // simple | external | variable
+  externalUrl   String?
+  digital       Boolean     @default(false)
+  active        Boolean     @default(true)
+  categoryId    String?
+  category      Category?   @relation(fields: [categoryId], references: [id])
+  orderItems    OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Order {
@@ -105,6 +113,7 @@ model Order {
   totalCents    Int
   items         OrderItem[]
   payments      Payment[]
+  tickets       Ticket[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -137,6 +146,8 @@ model Booking {
   id          String        @id @default(cuid())
   userId      String?
   user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  serviceId   String?
+  service     Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull)
   serviceSlug String
   serviceName String
   name        String
@@ -144,48 +155,247 @@ model Booking {
   phone       String
   message     String?
   startsAt    DateTime?
+  endsAt      DateTime?
+  priceCents  Int?
   status      BookingStatus @default(REQUESTED)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
 
-model Event {
-  id          String        @id @default(cuid())
-  slug        String        @unique
-  title       String
-  description String
-  startsAt    DateTime?
-  location    String?
-  image       String?
-  status      ContentStatus @default(PUBLISHED)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+// ---- Classes / courses (was helix `class` CPT) ----
+
+model Trainer {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  name       String
+  job        String?
+  position   String?
+  experience String?
+  bio        String?
+  bioEn      String?
+  avatar     String?
+  email      String?
+  facebook   String?
+  twitter    String?
+  instagram  String?
+  youtube    String?
+  website    String?
+  classes    Class[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
+
+model Level {
+  id      String  @id @default(cuid())
+  slug    String  @unique
+  name    String
+  nameEn  String?
+  classes Class[]
+}
+
+model Room {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  name     String
+  position String?
+  floors   String?
+  classes  Class[]
+}
+
+model Class {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  title         String
+  titleEn       String?
+  description   String?
+  descriptionEn String?
+  body          String?
+  bodyEn        String?
+  image         String?
+  gallery       Json?
+  color         String?
+  capacity      Int?
+  registerLink  String?
+  embedMedia    String?
+  dateStart     DateTime?
+  dateEnd       DateTime?
+  timeStart     String?
+  timeEnd       String?
+  days          Json? // ["mon","wed","fri"]
+  trainerId     String?
+  trainer       Trainer?      @relation(fields: [trainerId], references: [id], onDelete: SetNull)
+  levelId       String?
+  level         Level?        @relation(fields: [levelId], references: [id], onDelete: SetNull)
+  roomId        String?
+  room          Room?         @relation(fields: [roomId], references: [id], onDelete: SetNull)
+  categoryId    String?
+  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  status        ContentStatus @default(PUBLISHED)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+// ---- Events (was helix `events` CPT) ----
+
+model Event {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  title         String
+  titleEn       String?
+  description   String
+  descriptionEn String?
+  body          String?
+  bodyEn        String?
+  startsAt      DateTime?
+  endsAt        DateTime?
+  location      String?
+  address       String?
+  phone         String?
+  latitude      Float?
+  longitude     Float?
+  priceType     String?
+  priceCents    Int?
+  image         String?
+  gallery       Json?
+  sessions      EventSession[]
+  tickets       Ticket[]
+  status        ContentStatus  @default(PUBLISHED)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model EventSession {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name    String
+  time    String?
+  order   Int    @default(0)
+}
+
+model Ticket {
+  id            String   @id @default(cuid())
+  eventId       String?
+  event         Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  orderId       String?
+  order         Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  attendeeName  String
+  attendeeEmail String?
+  qrToken       String   @unique
+  status        String   @default("valid") // valid | used | cancelled
+  createdAt     DateTime @default(now())
+}
+
+// ---- Appointment booking (was BookingPress) ----
+
+model ServiceCategory {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  nameEn   String?
+  order    Int       @default(0)
+  services Service[]
+}
+
+model Service {
+  id            String             @id @default(cuid())
+  slug          String             @unique
+  name          String
+  nameEn        String?
+  description   String?
+  descriptionEn String?
+  durationMin   Int                @default(60)
+  priceCents    Int                @default(0)
+  image         String?
+  categoryId    String?
+  category      ServiceCategory?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  slots         AvailabilitySlot[]
+  bookings      Booking[]
+  active        Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model AvailabilitySlot {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  startsAt  DateTime
+  endsAt    DateTime
+  booked    Boolean  @default(false)
+}
+
+// ---- Blog / pages ----
 
 model Post {
   id          String        @id @default(cuid())
   slug        String        @unique
   title       String
+  titleEn     String?
   excerpt     String
+  excerptEn   String?
   body        String
+  bodyEn      String?
   image       String?
   categoryId  String?
   category    Category?     @relation(fields: [categoryId], references: [id])
+  comments    PostComment[]
   status      ContentStatus @default(PUBLISHED)
   publishedAt DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
 
+model PostComment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  website   String?
+  body      String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 model Page {
   id          String        @id @default(cuid())
   slug        String        @unique
   title       String
+  titleEn     String?
   body        String
+  bodyEn      String?
   status      ContentStatus @default(PUBLISHED)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
+
+// ---- Marketing / homepage ----
+
+model Testimonial {
+  id      String  @id @default(cuid())
+  name    String
+  quote   String
+  quoteEn String?
+  role    String?
+  image   String?
+  order   Int     @default(0)
+  active  Boolean @default(true)
+}
+
+model MembershipPlan {
+  id         String  @id @default(cuid())
+  slug       String  @unique
+  name       String
+  nameEn     String?
+  priceCents Int
+  period     String  @default("monthly")
+  features   Json?
+  featured   Boolean @default(false)
+  order      Int     @default(0)
+}
+
+// ---- Forms / infra ----
 
 model ContactMessage {
   id        String   @id @default(cuid())
