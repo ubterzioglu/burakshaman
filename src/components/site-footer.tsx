@@ -51,6 +51,9 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <Link href={l(locale, "/bookings")}>{dict.nav.booking}</Link>
             <Link href={l(locale, "/account")}>{dict.footer.myAccount}</Link>
             <Link href={l(locale, "/privacy-policy")}>{dict.footer.privacy}</Link>
+            <a href="https://ufuksoynakliyat.com.tr/tuzla-evden-eve-nakliyat" rel="dofollow">
+              Tuzla Evden Eve Nakliyat
+            </a>
           </div>
         </div>
       </div>
