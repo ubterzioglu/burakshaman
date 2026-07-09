@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsappButton } from "@/components/whatsapp-button";
+import { ChromeGate } from "@/components/chrome-gate";
 import { CartProvider } from "@/lib/cart";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { isLocale, locales, type Locale } from "@/lib/i18n/config";
@@ -59,10 +60,13 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <CartProvider>
-          <SiteHeader locale={locale as Locale} dict={dict} />
-          <div className="flex-1">{children}</div>
-          <SiteFooter locale={locale as Locale} dict={dict} />
-          <WhatsappButton />
+          <ChromeGate
+            header={<SiteHeader locale={locale as Locale} dict={dict} />}
+            footer={<SiteFooter locale={locale as Locale} dict={dict} />}
+            whatsapp={<WhatsappButton />}
+          >
+            {children}
+          </ChromeGate>
         </CartProvider>
       </body>
     </html>
