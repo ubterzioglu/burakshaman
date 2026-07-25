@@ -2,10 +2,15 @@ import { ProductCard } from "@/components/cards";
 import { listProducts } from "@/lib/repository";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "E-Store",
-};
+  description:
+    "Human Consciousness Decoded kitaplari, dijital urunler ve egitim materyalleri.",
+  path: "/store",
+  keywords: ["e-store", "digital products", "books", "Human Consciousness Decoded"],
+});
 
 export default async function StorePage({
   params,

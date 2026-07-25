@@ -1,9 +1,14 @@
 import { BookingForm } from "@/components/forms";
 import { services } from "@/lib/content";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Bookings",
-};
+  description:
+    "Kocluk ve rehberlik randevusu talebi olusturun. Ozel seanslar ve uygunluk takibi bu sayfadan yapilir.",
+  path: "/bookings",
+  keywords: ["booking", "randevu", "coaching session"],
+});
 
 export default function BookingsPage() {
   return (

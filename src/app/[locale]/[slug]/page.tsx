@@ -1,10 +1,32 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { staticPages } from "@/lib/content";
 import { getPage } from "@/lib/repository";
 import { HtmlContent } from "@/components/html-content";
+import { buildMetadata, excerptText } from "@/lib/seo";
 
 export function generateStaticParams() {
   return staticPages.map((page) => ({ slug: page.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await getPage(slug);
+
+  if (!page) {
+    return {};
+  }
+
+  return buildMetadata({
+    title: page.title,
+    description: excerptText(page.body),
+    path: `/${slug}`,
+    keywords: [page.title, "Shaman Life"],
+  });
 }
 
 export default async function StaticPage({

@@ -2,10 +2,15 @@ import { ServiceCard } from "@/components/cards";
 import { services } from "@/lib/content";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Classes",
-};
+  description:
+    "Kisisel gelisim, liderlik ve butunsel donusum odakli egitimler ve calisma basliklari.",
+  path: "/classes",
+  keywords: ["egitimler", "liderlik egitimi", "kisisel gelisim"],
+});
 
 export default async function ClassesPage({
   params,

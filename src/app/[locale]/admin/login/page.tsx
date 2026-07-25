@@ -4,10 +4,12 @@ import { getSession } from "@/lib/auth";
 import { AdminLoginForm } from "@/components/admin-login-form";
 import { site } from "@/lib/content";
 import { l, type Locale } from "@/lib/i18n/config";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Admin Login",
-};
+export const metadata = buildNoIndexMetadata(
+  "Admin Login",
+  "Private admin authentication page.",
+);
 
 export default async function AdminLoginPage({
   params,

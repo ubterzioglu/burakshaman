@@ -1,9 +1,14 @@
 import { ContactForm, NewsletterForm } from "@/components/forms";
 import { site } from "@/lib/content";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Contact",
-};
+  description:
+    "Burak Akcakanat ile iletisime gecin. Istanbul ofis bilgileri, telefon, e-posta ve iletisim formu.",
+  path: "/contact",
+  keywords: ["iletisim", "Istanbul", "Besiktas", "contact"],
+});
 
 export default function ContactPage() {
   return (

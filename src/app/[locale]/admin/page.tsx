@@ -2,10 +2,53 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getDb, hasDatabase } from "@/lib/db";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Admin",
+type DashboardBooking = {
+  id: string;
+  name: string;
+  serviceName: string;
+  status: string;
 };
+
+type DashboardOrder = {
+  id: string;
+  merchantOid: string;
+  status: string;
+  totalCents: number;
+  currency: string;
+};
+
+type DashboardMessage = {
+  id: string;
+  name: string;
+  email: string;
+  handled: boolean;
+};
+
+type RevisionCommentItem = {
+  id: string;
+  body: string;
+  createdAt: Date;
+  author: {
+    name: string;
+  } | null;
+};
+
+type RevisionItem = {
+  id: string;
+  title: string;
+  priority: string;
+  status: string;
+  targetPath: string | null;
+  description: string;
+  comments: RevisionCommentItem[];
+};
+
+export const metadata = buildNoIndexMetadata(
+  "Admin",
+  "Private admin dashboard.",
+);
 
 const modules = [
   "Pages",
@@ -112,6 +155,14 @@ export default async function AdminPage({
           getDb().revisionRequest.count(),
         ])
       : null;
+  const stats: Array<[string, number]> = [
+    ["Products", dashboard?.[0] ?? 0],
+    ["Posts", dashboard?.[1] ?? 0],
+    ["Pages", dashboard?.[2] ?? 0],
+    ["Events", dashboard?.[3] ?? 0],
+    ["Newsletter", dashboard?.[7] ?? 0],
+    ["Revisions", dashboard?.[9] ?? 0],
+  ];
 
   return (
     <main className="section">
@@ -136,14 +187,7 @@ export default async function AdminPage({
       </div>
       <>
           <div className="mt-8 grid gap-4 md:grid-cols-4">
-            {[
-              ["Products", dashboard?.[0] ?? 0],
-              ["Posts", dashboard?.[1] ?? 0],
-              ["Pages", dashboard?.[2] ?? 0],
-              ["Events", dashboard?.[3] ?? 0],
-              ["Newsletter", dashboard?.[7] ?? 0],
-              ["Revisions", dashboard?.[9] ?? 0],
-            ].map(([label, value]) => (
+            {stats.map(([label, value]) => (
               <div key={label} className="rounded-lg border border-stone-200 bg-white p-5">
                 <p className="text-sm text-stone-500">{label}</p>
                 <p className="mt-2 text-3xl font-semibold">{value}</p>
@@ -154,7 +198,7 @@ export default async function AdminPage({
             <section className="rounded-lg border border-stone-200 bg-white p-5">
               <h2 className="text-xl font-semibold">Recent bookings</h2>
               <div className="mt-4 grid gap-3 text-sm">
-                {(dashboard?.[4] ?? []).map((booking) => (
+                {(dashboard?.[4] ?? []).map((booking: DashboardBooking) => (
                   <div key={booking.id} className="border-b border-stone-100 pb-3">
                     <p className="font-semibold">{booking.name}</p>
                     <p className="text-stone-600">{booking.serviceName} | {booking.status}</p>
@@ -165,7 +209,7 @@ export default async function AdminPage({
             <section className="rounded-lg border border-stone-200 bg-white p-5">
               <h2 className="text-xl font-semibold">Recent orders</h2>
               <div className="mt-4 grid gap-3 text-sm">
-                {(dashboard?.[5] ?? []).map((order) => (
+                {(dashboard?.[5] ?? []).map((order: DashboardOrder) => (
                   <div key={order.id} className="border-b border-stone-100 pb-3">
                     <p className="font-semibold">{order.merchantOid}</p>
                     <p className="text-stone-600">{order.status} | {(order.totalCents / 100).toFixed(2)} {order.currency}</p>
@@ -176,7 +220,7 @@ export default async function AdminPage({
             <section className="rounded-lg border border-stone-200 bg-white p-5">
               <h2 className="text-xl font-semibold">Messages</h2>
               <div className="mt-4 grid gap-3 text-sm">
-                {(dashboard?.[6] ?? []).map((message) => (
+                {(dashboard?.[6] ?? []).map((message: DashboardMessage) => (
                   <div key={message.id} className="border-b border-stone-100 pb-3">
                     <p className="font-semibold">{message.name}</p>
                     <p className="text-stone-600">{message.email} | {message.handled ? "Handled" : "Open"}</p>
@@ -217,7 +261,7 @@ export default async function AdminPage({
               {(dashboard?.[8] ?? []).length === 0 ? (
                 <p className="text-sm text-stone-500">No revision requests yet.</p>
               ) : (
-                (dashboard?.[8] ?? []).map((revision) => (
+                (dashboard?.[8] ?? []).map((revision: RevisionItem) => (
                   <article key={revision.id} className="rounded-lg border border-stone-200 p-4">
                     <div className="flex flex-col justify-between gap-3 md:flex-row">
                       <div>
@@ -244,7 +288,7 @@ export default async function AdminPage({
                     </p>
 
                     <div className="mt-5 grid gap-3 border-t border-stone-100 pt-4">
-                      {revision.comments.map((comment) => (
+                      {revision.comments.map((comment: RevisionCommentItem) => (
                         <div key={comment.id} className="rounded-lg bg-stone-50 p-3 text-sm">
                           <p className="font-semibold">
                             {comment.author?.name ?? "Admin"}{" "}

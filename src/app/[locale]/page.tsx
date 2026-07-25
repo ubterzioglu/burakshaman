@@ -12,6 +12,21 @@ import {
 } from "@/lib/content";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { l, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Burak Akcakanat",
+  description:
+    "Burak Akcakanat ile holistic coaching, stratejik danismanlik, egitimler ve Human Consciousness Decoded yaklasimini kesfedin.",
+  path: "/",
+  keywords: [
+    "executive coaching",
+    "holistic coaching",
+    "strategic consulting",
+    "Human Consciousness Decoded",
+  ],
+  image: "/assets/hero.jpg",
+});
 
 export default async function Home({
   params,

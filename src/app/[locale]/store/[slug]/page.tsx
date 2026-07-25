@@ -1,12 +1,35 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { AddToCart } from "@/components/add-to-cart";
 import { formatTry, products } from "@/lib/content";
 import { getProduct } from "@/lib/repository";
 import type { Locale } from "@/lib/i18n/config";
+import { absoluteUrl, buildMetadata, excerptText, siteUrl } from "@/lib/seo";
 
 export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) {
+    return {};
+  }
+
+  return buildMetadata({
+    title: product.name,
+    description: excerptText(product.description),
+    path: `/store/${slug}`,
+    keywords: [product.name, product.category, "digital product"],
+    image: product.image,
+  });
 }
 
 export default async function ProductPage({
@@ -17,9 +40,40 @@ export default async function ProductPage({
   const { slug, locale } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: excerptText(product.description),
+    image: [absoluteUrl(product.image)],
+    category: product.category,
+    brand: {
+      "@type": "Brand",
+      name: "Shaman Life",
+    },
+    url: absoluteUrl(`/store/${slug}`),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "TRY",
+      price: (product.priceCents / 100).toFixed(2),
+      availability: "https://schema.org/InStock",
+      url: absoluteUrl(`/store/${slug}`),
+      seller: {
+        "@type": "Organization",
+        name: "Shaman Life",
+        url: siteUrl,
+      },
+    },
+  };
 
   return (
     <main className="section grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd),
+        }}
+      />
       <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-stone-200">
         <Image src={product.image} alt={product.name} fill className="object-cover" />
       </div>

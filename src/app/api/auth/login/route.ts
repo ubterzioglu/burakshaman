@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Role } from "@prisma/client";
 import { z } from "zod";
 import { createSessionCookie, hashPassword } from "@/lib/auth";
 import { getAdminPassword } from "@/lib/admin-password";
@@ -9,6 +8,7 @@ import { jsonError } from "@/lib/http";
 const adminLoginSchema = z.object({
   password: z.string().min(1).max(100),
 });
+const adminRole = "ADMIN" as const;
 
 async function readPayload(request: NextRequest) {
   const type = request.headers.get("content-type") ?? "";
@@ -33,11 +33,11 @@ export async function POST(request: NextRequest) {
       create: {
         email: adminEmail,
         name: "Shaman Life Admin",
-        role: Role.ADMIN,
+        role: adminRole,
         passwordHash: await hashPassword(payload.password),
       },
       update: {
-        role: Role.ADMIN,
+        role: adminRole,
         passwordHash: await hashPassword(payload.password),
       },
     });

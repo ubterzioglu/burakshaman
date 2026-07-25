@@ -1,10 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { listPosts } from "@/lib/repository";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Blog",
-};
+  description:
+    "Burak Akcakanat'in coaching, liderlik, farkindalik ve Human Consciousness Decoded notlari.",
+  path: "/blog",
+  keywords: ["blog", "liderlik", "farkindalik", "coaching notes"],
+});
 
 export default async function BlogPage() {
   const posts = await listPosts();

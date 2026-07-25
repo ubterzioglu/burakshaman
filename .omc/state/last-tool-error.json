@@ -1,0 +1,7 @@
+{
+  "tool_name": "PowerShell",
+  "tool_input_preview": "{\"command\":\"cd 'c:\\\\temp_private\\\\shaman'; npx tsc --noEmit 2>&1 | Where-Object { $_ -notmatch '^\\\\.next[\\\\\\\\/]types' } | Select-Object -First 40; Write-Output \\\"TSC-DONE\\\"\",\"timeout\":300000,\"descript...",
+  "error": "Exit code 2\nsrc/app/api/checkout/route.ts(60,46): error TS7006: Parameter 'p' implicitly has an 'any' type.\r\nTSC-DONE",
+  "timestamp": "2026-07-26T12:07:09.376Z",
+  "retry_count": 2
+}

@@ -3,10 +3,27 @@ import { getSession } from "@/lib/auth";
 import { getDb, hasDatabase } from "@/lib/db";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { l, type Locale } from "@/lib/i18n/config";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "My Account",
+type AccountOrder = {
+  id: string;
+  merchantOid: string;
+  status: string;
+  totalCents: number;
+  currency: string;
 };
+
+type AccountBooking = {
+  id: string;
+  serviceName: string;
+  status: string;
+  startsAt: Date | null;
+};
+
+export const metadata = buildNoIndexMetadata(
+  "My Account",
+  "Customer account area for orders, bookings and session access.",
+);
 
 export default async function AccountPage({
   params,
@@ -56,7 +73,7 @@ export default async function AccountPage({
                 {(history?.orders ?? []).length === 0 ? (
                   <p className="text-sm text-stone-500">No orders yet.</p>
                 ) : (
-                  history?.orders.map((order) => (
+                  history?.orders.map((order: AccountOrder) => (
                     <div key={order.id} className="rounded-lg border border-stone-200 p-4">
                       <p className="font-semibold">{order.merchantOid}</p>
                       <p className="text-sm text-stone-600">
@@ -73,7 +90,7 @@ export default async function AccountPage({
                 {(history?.bookings ?? []).length === 0 ? (
                   <p className="text-sm text-stone-500">No bookings yet.</p>
                 ) : (
-                  history?.bookings.map((booking) => (
+                  history?.bookings.map((booking: AccountBooking) => (
                     <div key={booking.id} className="rounded-lg border border-stone-200 p-4">
                       <p className="font-semibold">{booking.serviceName}</p>
                       <p className="text-sm text-stone-600">

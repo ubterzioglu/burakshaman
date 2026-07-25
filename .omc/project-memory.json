@@ -1,0 +1,257 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1784985476001,
+  "projectRoot": "c:\\temp_private\\shaman",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.2.10",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.2.4",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.4",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": null,
+    "lintCommand": "pnpm lint",
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "eslint",
+      "prisma:generate": "prisma generate",
+      "prisma:migrate": "prisma migrate deploy",
+      "prisma:studio": "prisma studio",
+      "db:seed": "tsx prisma/seed.ts"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": true,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "prisma": {
+      "path": "prisma",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1784985475934,
+      "keyFiles": [
+        "schema.prisma",
+        "seed.ts"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 5,
+      "lastAccessed": 1784985475935,
+      "keyFiles": [
+        "file.svg",
+        "globe.svg",
+        "next.svg",
+        "vercel.svg",
+        "window.svg"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1784985475935,
+      "keyFiles": []
+    },
+    "prisma\\migrations": {
+      "path": "prisma\\migrations",
+      "purpose": "Database migrations",
+      "fileCount": 1,
+      "lastAccessed": 1784985475935,
+      "keyFiles": [
+        "migration_lock.toml"
+      ]
+    },
+    "public\\assets": {
+      "path": "public\\assets",
+      "purpose": "Static assets",
+      "fileCount": 6,
+      "lastAccessed": 1784985475936,
+      "keyFiles": [
+        "burak-akcakanat.png",
+        "coaching.jpg",
+        "hcd.jpg"
+      ]
+    },
+    "src\\app": {
+      "path": "src\\app",
+      "purpose": "Application code",
+      "fileCount": 6,
+      "lastAccessed": 1784985475937,
+      "keyFiles": [
+        "favicon.ico",
+        "globals.css",
+        "layout.tsx"
+      ]
+    },
+    "src\\components": {
+      "path": "src\\components",
+      "purpose": "UI components",
+      "fileCount": 4,
+      "lastAccessed": 1784985475937,
+      "keyFiles": [
+        "cards.tsx",
+        "forms.tsx",
+        "site-footer.tsx"
+      ]
+    },
+    "src\\lib": {
+      "path": "src\\lib",
+      "purpose": "Library code",
+      "fileCount": 12,
+      "lastAccessed": 1784985475938,
+      "keyFiles": [
+        "admin-password.ts",
+        "admin.ts",
+        "auth.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src\\lib\\repository.ts",
+      "accessCount": 8,
+      "lastAccessed": 1785067609470,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\site-footer.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1785067396859,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\layout.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1785067550628,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\account\\page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1785067412509,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1785067428251,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\[slug]\\page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1785067436543,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\store\\[slug]\\page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1785067442147,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\blog\\[slug]\\page.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1785067506650,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 1,
+      "lastAccessed": 1784986384694,
+      "type": "directory"
+    },
+    {
+      "path": "src\\lib\\seo.ts",
+      "accessCount": 1,
+      "lastAccessed": 1785067301196,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\checkout\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1785067468310,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\classes\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1785067474250,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\events\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1785067480026,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\store\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1785067485655,
+      "type": "file"
+    },
+    {
+      "path": "src\\app\\[locale]\\admin\\login\\page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1785067490636,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

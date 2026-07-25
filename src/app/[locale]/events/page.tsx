@@ -3,10 +3,15 @@ import Link from "next/link";
 import { listEvents } from "@/lib/repository";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { l, type Locale } from "@/lib/i18n/config";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = buildMetadata({
   title: "Events",
-};
+  description:
+    "Shaman Life kapsamindaki guncel etkinlikleri, atolyeleri ve online programlari inceleyin.",
+  path: "/events",
+  keywords: ["events", "atolye", "online program", "Istanbul events"],
+});
 
 export default async function EventsPage({
   params,

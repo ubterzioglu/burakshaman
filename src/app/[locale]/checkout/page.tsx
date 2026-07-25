@@ -1,10 +1,12 @@
 import { CheckoutClient } from "@/components/checkout-client";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
-export const metadata = {
-  title: "Checkout",
-};
+export const metadata = buildNoIndexMetadata(
+  "Checkout",
+  "Payment flow for store orders.",
+);
 
 export default async function CheckoutPage({
   params,
