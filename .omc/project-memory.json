@@ -170,8 +170,8 @@
     },
     {
       "path": "src\\components\\site-footer.tsx",
-      "accessCount": 6,
-      "lastAccessed": 1785067396859,
+      "accessCount": 8,
+      "lastAccessed": 1785067664693,
       "type": "file"
     },
     {
@@ -190,6 +190,12 @@
       "path": "src\\app\\[locale]\\page.tsx",
       "accessCount": 3,
       "lastAccessed": 1785067428251,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\site-footer.test.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1785067683820,
       "type": "file"
     },
     {
