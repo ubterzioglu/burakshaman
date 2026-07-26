@@ -51,18 +51,22 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <Link href={l(locale, "/bookings")}>{dict.nav.booking}</Link>
             <Link href={l(locale, "/account")}>{dict.footer.myAccount}</Link>
             <Link href={l(locale, "/privacy-policy")}>{dict.footer.privacy}</Link>
-            <a href="https://ufuksoynakliyat.com.tr/tuzla-evden-eve-nakliyat" rel="dofollow">
-              Tuzla Evden Eve Nakliyat
-            </a>
-            <span><a href="https://ufuksoynakliyat.com.tr/kartal-evden-eve-nakliyat" rel="dofollow">Kartal Evden Eve Nakliyat</a> Firması Ufuksoy Nakliyat A.Ş</span>
-            <span><a href="https://tekhurdametal.com/istanbul-hurdaci/" rel="dofollow">İstanbul Hurdacı</a> Firması Tek Hurda Metal A.Ş</span>
-            <span><a href="https://tekhurdametal.com/hurda-fiyatlari/" rel="dofollow">Hurda Fiyatları</a> Tek Hurda Metal</span>
-            <span><a href="https://tekhurdametal.com/hurda-demir-fiyatlari/" rel="dofollow">Demir Hurda Fiyatları</a> Tek Hurda Metal</span>
-            <span><a href="https://tekhurdametal.com/beylikduzu-hurdaci/" rel="dofollow">Beylikdüzü Hurdacı</a> Firması Tek Hurda Metal A.Ş</span>
-            <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Sex Shop</a> Lion Erotik</span>
-            <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Erotik Shop</a> Lion Erotik</span>
-            <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Seks Shop</a> Lion Erotik</span>
           </div>
+        </div>
+      </div>
+      <div className="border-t border-white/10 px-5 py-5">
+        <div className="mx-auto flex max-w-7xl flex-wrap gap-x-4 gap-y-1 text-[11px] leading-5 text-stone-500">
+          <a href="https://ufuksoynakliyat.com.tr/tuzla-evden-eve-nakliyat" rel="dofollow">
+            Tuzla Evden Eve Nakliyat
+          </a>
+          <span><a href="https://ufuksoynakliyat.com.tr/kartal-evden-eve-nakliyat" rel="dofollow">Kartal Evden Eve Nakliyat</a> Firması Ufuksoy Nakliyat A.Ş</span>
+          <span><a href="https://tekhurdametal.com/istanbul-hurdaci/" rel="dofollow">İstanbul Hurdacı</a> Firması Tek Hurda Metal A.Ş</span>
+          <span><a href="https://tekhurdametal.com/hurda-fiyatlari/" rel="dofollow">Hurda Fiyatları</a> Tek Hurda Metal</span>
+          <span><a href="https://tekhurdametal.com/hurda-demir-fiyatlari/" rel="dofollow">Demir Hurda Fiyatları</a> Tek Hurda Metal</span>
+          <span><a href="https://tekhurdametal.com/beylikduzu-hurdaci/" rel="dofollow">Beylikdüzü Hurdacı</a> Firması Tek Hurda Metal A.Ş</span>
+          <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Sex Shop</a> Lion Erotik</span>
+          <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Erotik Shop</a> Lion Erotik</span>
+          <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Seks Shop</a> Lion Erotik</span>
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-stone-400">

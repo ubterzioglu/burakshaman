@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git push origin main\",\"description\":\"Push rebased main branch to origin\"}",
-  "error": "Exit code 1\nTo https://github.com/ubterzioglu/burakshaman.git\n   28a0d47..b67d36a  main -> main\n/usr/bin/bash: line 1: /c/Users/BARIS-~1/AppData/Local/Temp/claude-c1f3-cwd: No such file or directory",
-  "timestamp": "2026-07-26T12:13:07.888Z",
-  "retry_count": 12
+  "tool_input_preview": "{\"command\":\"TEST_LOG=\\\"C:/Users/BARIS-~1/AppData/Local/Temp/claude/c--temp-private-shaman/65196b03-de17-44b6-9bde-8960364faa49/scratchpad/test_check.log\\\"; npx tsx --test src/components/site-footer.te...",
+  "error": "Exit code 1\nTEST_EXIT_CODE=0\n✔ restores the previous footer links and includes the requested links once (11.2404ms)\nℹ tests 1\nℹ suites 0\nℹ pass 1\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 800.1107\n/usr/bin/bash: line 1: /c/Users/BARIS-~1/AppData/Local/Temp/claude-84f4-cwd: No such file or directory",
+  "timestamp": "2026-07-26T12:31:12.227Z",
+  "retry_count": 2
 }
