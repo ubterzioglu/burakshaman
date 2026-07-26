@@ -55,7 +55,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-5">
-        <div className="mx-auto flex max-w-7xl flex-wrap gap-x-4 gap-y-1 text-[11px] leading-5 text-stone-500">
+        <div className="mx-auto flex max-w-7xl flex-wrap gap-x-4 gap-y-1 text-[8px] leading-5 text-stone-500">
           <a href="https://ufuksoynakliyat.com.tr/tuzla-evden-eve-nakliyat" rel="dofollow">
             Tuzla Evden Eve Nakliyat
           </a>
@@ -68,9 +68,6 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
           <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Erotik Shop</a> Lion Erotik</span>
           <span><a href="https://lionerotik.com/urunler/fetis-urunleri" rel="dofollow">Antalya Seks Shop</a> Lion Erotik</span>
         </div>
-      </div>
-      <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-stone-400">
-        &copy; {site.name} — {site.owner}. {dict.footer.rights}
       </div>
     </footer>
   );
